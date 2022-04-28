@@ -27,6 +27,10 @@ resource functionApp 'Microsoft.Web/sites@2020-06-01' = {
           'value': 'node'
         }
         {
+          'name': 'WEBSITE_NODE_DEFAULT_VERSION'
+          'value': '~16'
+        }
+        {
           'name': 'CosmosKey'
           'value': listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', '${nameprefix}cosmos'), '2021-06-15').connectionStrings[0].connectionString
         }
@@ -46,7 +50,6 @@ resource functionasp 'Microsoft.Web/serverfarms@2021-03-01' = {
     name: 'Y1'
     tier: 'Dynamic'
   }
-  kind: 'functionapp'
 }
 
 resource functionstorage 'Microsoft.Storage/storageAccounts@2021-08-01' = {
@@ -63,5 +66,5 @@ resource functionstorage 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   }
 }
 
-output functionUrl string = '${nameprefix}-graphqlfunc.azurewebsites.net'
+output functionUrl string = '${functionApp.name}.azurewebsites.net'
 output functionName string = functionApp.name
