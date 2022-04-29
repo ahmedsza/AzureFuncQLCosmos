@@ -2,6 +2,7 @@
 # - Deploy Azure Resources
 # - Build the API and the Frontend
 # - Publish the API and the Frontend
+# - Insert sample data into CosmosDB
 #
 # Secrets required to be in place:
 # - AZURE_CREDENTIALS
@@ -10,12 +11,18 @@ name: Build and Deploy Application
 
 env:
   # This is the global resource prefix for this deployment
-  DEPLOYMENT_NAME: "nielsbdemo"
+  DEPLOYMENT_NAME: "demo2262"
+
+  # Azure region to which the resources will be deployed
+  DEPLOYMENT_REGION: "southcentralus"
 
 on:
   # Triggers the workflow on push events on the main branch
   push:
     branches: [ main ]
+    paths-ignore:
+      - '*.md'
+      - '*.png'
 
   # We also want to be able to run this manually from Github
   workflow_dispatch:
@@ -45,7 +52,7 @@ jobs:
                 name = "${{env.DEPLOYMENT_NAME}}";
               }
 
-              $res = New-AzDeployment -TemplateFile "infra/bicep/main.bicep" -TemplateParameterObject $params -Location ${{ secrets.AZURE_REGION }}
+              $res = New-AzDeployment -TemplateFile "infra/bicep/main.bicep" -TemplateParameterObject $params -Location ${{env.DEPLOYMENT_REGION}}
               
               # Save the outputs from the deployment
               # These contain the resource names we need for deploying
